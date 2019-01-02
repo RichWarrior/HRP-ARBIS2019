@@ -1,0 +1,134 @@
+﻿@model HRP.Arbis.Models.SchoolProfileViewModel
+@{
+    ViewBag.Title = "EditAccount";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script>
+    function ChangeCity() {
+        var id = document.getElementById('CityId').value;
+        var html = '';
+        $('#District_Id').empty();
+        $.ajax({
+            type: "GET",
+            url: "/Request/CityDistricts?id=" + id,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                $.each(response, function (value, item) {
+                    html+= '<option value="' + item.Id + '">' + item.Name + '</option>';
+                });
+                $('#District_Id').append(html)
+            }
+        })
+      
+        
+    }
+</script>
+<div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12">
+    <div class="card">
+        <h5 class="card-header">Profilinizi Düzenleyiniz Oluştur</h5>
+        @Html.ValidationSummary()
+        <div class="card-body">
+            @using (Html.BeginForm())
+            {
+                @Html.AntiForgeryToken()
+                <div class="form-group row">
+                    <label for="inputEmail2" class="col-3 col-lg-2 col-form-label text-right">@Html.LabelFor(x => x.Name)</label>
+                    <div class="col-9 col-lg-10">
+                        <input id="Name" type="text" name="Name" class="form-control disabled" value="@Html.ValueFor(x=>x.Name)">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="inputEmail2" class="col-3 col-lg-2 col-form-label text-right">@Html.LabelFor(x => x.E_Mail)</label>
+                    <div class="col-9 col-lg-10">
+                        <input id="E_Mail" type="text" name="E_Mail" class="form-control disabled" value="@Html.ValueFor(x=>x.E_Mail)">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="inputEmail2" class="col-3 col-lg-2 col-form-label text-right">@Html.LabelFor(x => x.Password)</label>
+                    <div class="col-9 col-lg-10">
+                        <input id="Password" type="password" name="Password" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="inputEmail2" class="col-3 col-lg-2 col-form-label text-right">@Html.LabelFor(x => x.phoneNumber)</label>
+                    <div class="col-9 col-lg-10">
+                        <input id="phoneNumber" type="text" name="phoneNumber" class="form-control" value="@Html.ValueFor(x=>x.phoneNumber)">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="inputEmail2" class="col-3 col-lg-2 col-form-label text-right">@Html.LabelFor(x => x.address)</label>
+                    <div class="col-9 col-lg-10">
+                        <textarea id="address" type="text" name="address" class="form-control" rows="5" cols="50">@Html.ValueFor(x=>x.address)</textarea>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="inputEmail2" class="col-3 col-lg-2 col-form-label text-right">@Html.LabelFor(x => x.City)</label>
+                    <div class="col-9 col-lg-10">
+                        <select id="CityId" name="CityId" class="form-control" onchange="ChangeCity()">
+                            @foreach (var item in Model.City)
+                            {
+                                if (item.Id == Model.CityId)
+                                {
+                                    <option selected="selected" value="@item.Id">@item.Name</option>
+                                }
+
+                                else
+                                {
+                                    <option value="@item.Id">@item.Name</option>
+
+                                }
+                            }
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="inputEmail2" class="col-3 col-lg-2 col-form-label text-right">@Html.LabelFor(x => x.District)</label>
+                    <div class="col-9 col-lg-10">
+                        <select id="District_Id" name="District_Id" class="form-control">
+                            @foreach (var item in Model.District)
+                            {
+                                if (Model.District_Id != null)
+                                {
+                                    if (Model.District_Id == item.Id)
+                                    {
+                                        <option selected="selected" value="@item.Id">@item.Name</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@item.Id">@item.Name</option>
+                                    }
+                                }
+                            }
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="inputEmail2" class="col-3 col-lg-2 col-form-label text-right">Okul Türü</label>
+                    <div class="col-9 col-lg-10">
+                        <select id="type_id" name="type_id" class="form-control">
+                            @foreach (var item in Model.type)
+                            {
+                                if (Model.type_id == item.Id)
+                                {
+                                    <option selected="selected" value="@item.Id">@item.Name</option>
+                                }
+                                else
+                                {
+                                    <option value="@item.Id">@item.Name</option>
+                                }
+                            }
+                        </select>
+                    </div>
+                </div>
+                <div class="row pt-2 pt-sm-5 mt-1">
+                    <div class="col-sm-6 pl-0">
+                        <p class="text-right">
+                            <button type="submit" class="btn btn-space btn-primary">Kaydet</button>
+                        </p>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>

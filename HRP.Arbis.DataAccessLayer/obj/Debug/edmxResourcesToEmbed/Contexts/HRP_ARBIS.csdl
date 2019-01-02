@@ -1,0 +1,228 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="HRP_ARBIS2019Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityContainer Name="HRP_ARBIS2019Entities" annotation:LazyLoadingEnabled="true">
+    <FunctionImport Name="sp_alterdiagram">
+      <Parameter Name="diagramname" Mode="In" Type="String" />
+      <Parameter Name="owner_id" Mode="In" Type="Int32" />
+      <Parameter Name="version" Mode="In" Type="Int32" />
+      <Parameter Name="definition" Mode="In" Type="Binary" />
+    </FunctionImport>
+    <FunctionImport Name="sp_creatediagram">
+      <Parameter Name="diagramname" Mode="In" Type="String" />
+      <Parameter Name="owner_id" Mode="In" Type="Int32" />
+      <Parameter Name="version" Mode="In" Type="Int32" />
+      <Parameter Name="definition" Mode="In" Type="Binary" />
+    </FunctionImport>
+    <FunctionImport Name="sp_dropdiagram">
+      <Parameter Name="diagramname" Mode="In" Type="String" />
+      <Parameter Name="owner_id" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="SP_GETMENU" ReturnType="Collection(HRP_ARBIS2019Model.SP_GETMENU_Result)">
+      <Parameter Name="ROLE_ID" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="sp_helpdiagramdefinition" ReturnType="Collection(HRP_ARBIS2019Model.sp_helpdiagramdefinition_Result)">
+      <Parameter Name="diagramname" Mode="In" Type="String" />
+      <Parameter Name="owner_id" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="sp_helpdiagrams" ReturnType="Collection(HRP_ARBIS2019Model.sp_helpdiagrams_Result)">
+      <Parameter Name="diagramname" Mode="In" Type="String" />
+      <Parameter Name="owner_id" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="sp_renamediagram">
+      <Parameter Name="diagramname" Mode="In" Type="String" />
+      <Parameter Name="owner_id" Mode="In" Type="Int32" />
+      <Parameter Name="new_diagramname" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="sp_upgraddiagrams" />
+    <EntitySet Name="City" EntityType="HRP_ARBIS2019Model.City" />
+    <EntitySet Name="District" EntityType="HRP_ARBIS2019Model.District" />
+    <EntitySet Name="Menu" EntityType="HRP_ARBIS2019Model.Menu" />
+    <EntitySet Name="Role" EntityType="HRP_ARBIS2019Model.Role" />
+    <EntitySet Name="Role_Menu" EntityType="HRP_ARBIS2019Model.Role_Menu" />
+    <EntitySet Name="Schools" EntityType="HRP_ARBIS2019Model.Schools" />
+    <EntitySet Name="ServerInfo" EntityType="HRP_ARBIS2019Model.ServerInfo" />
+    <EntitySet Name="sysdiagrams" EntityType="HRP_ARBIS2019Model.sysdiagrams" />
+    <AssociationSet Name="FK_District_City" Association="HRP_ARBIS2019Model.FK_District_City">
+      <End Role="City" EntitySet="City" />
+      <End Role="District" EntitySet="District" />
+    </AssociationSet>
+    <EntitySet Name="Type" EntityType="HRP_ARBIS2019Model.Type" />
+    <AssociationSet Name="FK_Schools_Type" Association="HRP_ARBIS2019Model.FK_Schools_Type">
+      <End Role="Type" EntitySet="Type" />
+      <End Role="Schools" EntitySet="Schools" />
+    </AssociationSet>
+    <EntitySet Name="SchoolPosts" EntityType="HRP_ARBIS2019Model.SchoolPosts" />
+    <AssociationSet Name="FK_Posts_Schools" Association="HRP_ARBIS2019Model.FK_Posts_Schools">
+      <End Role="Schools" EntitySet="Schools" />
+      <End Role="SchoolPosts" EntitySet="SchoolPosts" />
+    </AssociationSet>
+    <EntitySet Name="Actions" EntityType="HRP_ARBIS2019Model.Actions" />
+    <FunctionImport Name="SP_ACTION" ReturnType="Collection(HRP_ARBIS2019Model.SP_ACTION_Result)" />
+  </EntityContainer>
+  <ComplexType Name="SP_GETMENU_Result">
+    <Property Type="String" Name="Id" Nullable="false" MaxLength="128" />
+    <Property Type="String" Name="Name" Nullable="false" MaxLength="50" />
+    <Property Type="String" Name="Icon" Nullable="false" MaxLength="50" />
+    <Property Type="String" Name="Controller" Nullable="false" MaxLength="50" />
+    <Property Type="String" Name="Action" Nullable="false" MaxLength="50" />
+    <Property Type="String" Name="Nested" Nullable="false" MaxLength="50" />
+    <Property Type="Int32" Name="Rank" Nullable="false" />
+  </ComplexType>
+  <ComplexType Name="sp_helpdiagramdefinition_Result">
+    <Property Type="Int32" Name="version" Nullable="true" />
+    <Property Type="Binary" Name="definition" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="sp_helpdiagrams_Result">
+    <Property Type="String" Name="Database" Nullable="true" MaxLength="128" />
+    <Property Type="String" Name="Name" Nullable="false" MaxLength="128" />
+    <Property Type="Int32" Name="ID" Nullable="false" />
+    <Property Type="String" Name="Owner" Nullable="true" MaxLength="128" />
+    <Property Type="Int32" Name="OwnerID" Nullable="false" />
+  </ComplexType>
+  <EntityType Name="City">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" />
+    <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="District" Relationship="HRP_ARBIS2019Model.FK_District_City" FromRole="City" ToRole="District" />
+  </EntityType>
+  <EntityType Name="District">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" />
+    <Property Name="City_Id" Type="Int32" Nullable="false" />
+    <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="City" Relationship="HRP_ARBIS2019Model.FK_District_City" FromRole="District" ToRole="City" />
+  </EntityType>
+  <EntityType Name="Menu">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+    <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Icon" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Controller" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Action" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Nested" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Rank" Type="Int32" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Role">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+    <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="Role_Menu">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+    <Property Name="Role_Id" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+    <Property Name="Menu_Id" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityType Name="Schools">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+    <Property Name="Name" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="E_Mail" Type="String" Nullable="false" MaxLength="150" FixedLength="false" Unicode="false" />
+    <Property Name="City_Id" Type="Int32" />
+    <Property Name="District_Id" Type="Int32" />
+    <Property Name="Phone_Number" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+    <Property Name="Address" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="SchoolType" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Type" Relationship="HRP_ARBIS2019Model.FK_Schools_Type" FromRole="Schools" ToRole="Type" />
+    <NavigationProperty Name="SchoolPosts" Relationship="HRP_ARBIS2019Model.FK_Posts_Schools" FromRole="Schools" ToRole="SchoolPosts" />
+  </EntityType>
+  <EntityType Name="ServerInfo">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+    <Property Name="key_str" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="value_str" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="sysdiagrams">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+    <Property Name="principal_id" Type="Int32" Nullable="false" />
+    <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="version" Type="Int32" />
+    <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+  </EntityType>
+  <Association Name="FK_District_City">
+    <End Type="HRP_ARBIS2019Model.City" Role="City" Multiplicity="1" />
+    <End Type="HRP_ARBIS2019Model.District" Role="District" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="City">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="District">
+        <PropertyRef Name="City_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="Type">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+    <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="Schools" Relationship="HRP_ARBIS2019Model.FK_Schools_Type" FromRole="Type" ToRole="Schools" />
+  </EntityType>
+  <Association Name="FK_Schools_Type">
+    <End Type="HRP_ARBIS2019Model.Type" Role="Type" Multiplicity="0..1" />
+    <End Type="HRP_ARBIS2019Model.Schools" Role="Schools" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Type">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Schools">
+        <PropertyRef Name="SchoolType" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="SchoolPosts">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+    <Property Name="School_Id" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+    <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Description" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="Schools" Relationship="HRP_ARBIS2019Model.FK_Posts_Schools" FromRole="SchoolPosts" ToRole="Schools" />
+  </EntityType>
+  <Association Name="FK_Posts_Schools">
+    <End Type="HRP_ARBIS2019Model.Schools" Role="Schools" Multiplicity="1" />
+    <End Type="HRP_ARBIS2019Model.SchoolPosts" Role="SchoolPosts" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Schools">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="SchoolPosts">
+        <PropertyRef Name="School_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="Actions">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="email" Type="String" Nullable="false" MaxLength="75" FixedLength="false" Unicode="false" />
+    <Property Name="Message" Type="String" Nullable="false" MaxLength="75" FixedLength="false" Unicode="false" />
+    <Property Name="Is_Completed" Type="Int32" Nullable="false" />
+  </EntityType>
+  <ComplexType Name="SP_ACTION_Result">
+    <Property Type="Int32" Name="Id" Nullable="false" />
+    <Property Type="String" Name="email" Nullable="false" MaxLength="75" />
+    <Property Type="String" Name="Message" Nullable="false" MaxLength="75" />
+    <Property Type="Int32" Name="Is_Completed" Nullable="false" />
+  </ComplexType>
+</Schema>

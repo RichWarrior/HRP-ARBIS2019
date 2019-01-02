@@ -1,0 +1,38 @@
+﻿@model HRP.Arbis.Models.HandshakeViewModel
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12">
+    <div class="card">
+        <h5 class="card-header">Yeni Paylşaım Oluştur</h5>
+        @Html.ValidationSummary()
+        <div class="card-body">
+            @using (Html.BeginForm())
+            {
+                @Html.AntiForgeryToken()
+                <div class="form-group row">
+                    <label for="inputEmail2" class="col-3 col-lg-2 col-form-label text-right">@Html.LabelFor(x => x.Name)</label>
+                    <div class="col-9 col-lg-10">
+                        <input id="Name" type="text" name="Name" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="inputEmail2" class="col-3 col-lg-2 col-form-label text-right">@Html.LabelFor(x => x.Description)</label>
+                    <div class="col-9 col-lg-10">
+                        <input id="Description" type="text" name="Description" class="form-control">
+                    </div>
+                </div>               
+                <div class="row pt-2 pt-sm-5 mt-1">
+                    <div class="col-sm-6 pl-0">
+                        <p class="text-right">
+                            <button type="submit" class="btn btn-space btn-primary">Kaydet</button>
+                        </p>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+
