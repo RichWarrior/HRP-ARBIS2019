@@ -85,6 +85,8 @@ namespace HRP.Arbis.DataAccessLayer.DLL
                     user.District_Id = model.District_Id;
                     user.Phone_Number = model.Phone_Number;
                     user.Address = model.Address;
+                    user.SchoolType = model.SchoolType;
+                    user.Name = model.Name;
                     await dbContext.SaveChangesAsync();
                     result = true;
                 }              

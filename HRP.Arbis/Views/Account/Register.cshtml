@@ -1,6 +1,6 @@
-﻿@model HRP.Arbis.Models.LoginViewModel
+﻿@model HRP.Arbis.Models.RegisterViewModel
 @{
-    ViewBag.Title = "Login";
+    ViewBag.Title = "Register";
     Layout = null;
 }
 <!doctype html>
@@ -10,7 +10,7 @@
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Giriş Yap</title>
+    <title>Kayıt Ol</title>
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="@Url.Content("~/Assets/vendor/bootstrap/css/bootstrap.min.css")" />
     <link rel="stylesheet" href="@Url.Content("~/Assets/vendor/fonts/circular-std/style.css")" />
@@ -50,18 +50,10 @@
                         <input class="form-control form-control-lg" name="email" id="email" type="text" placeholder="Kurum Kodunuz" autocomplete="on">
                     </div>
                     <div class="form-group">
-                        <input class="form-control form-control-lg" name="password" id="password" type="password" placeholder="Şifreniz">
+                        <input class="form-control form-control-lg" name="schoolName" id="schoolName" type="text" placeholder="Okul Adı" autocomplete="on">
                     </div>
-                    <button type="submit" class="btn btn-primary btn-lg btn-block">Giriş Yap</button>
+                    <button type="submit" class="btn btn-primary btn-lg btn-block">Kayıt Ol</button>
                 }
-            </div>
-            <div class="card-footer bg-white p-0">
-                <div class="card-footer-item card-footer-item-bordered">
-                    <a href="/Account/ForgotPassword" class="footer-link">Şifremi Unuttum</a>
-                </div>
-                <div class="card-footer-item card-footer-item-bordered">
-                    <a href="/Account/Register" class="footer-link">Kayıt Ol</a>
-                </div>
             </div>           
         </div>
     </div>
@@ -70,3 +62,5 @@
 </body>
 
 </html>
+
+

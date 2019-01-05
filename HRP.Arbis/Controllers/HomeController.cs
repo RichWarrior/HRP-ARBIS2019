@@ -12,7 +12,7 @@ namespace HRP.Arbis.Controllers
     public class HomeController : BaseController
     {
         public async Task<ActionResult> Index()
-        {           
+        {
             if (User.Identity.IsAuthenticated)
             {
                 var user = await UserManager.FindByEmailAsync(User.Identity.Name);
@@ -20,13 +20,19 @@ namespace HRP.Arbis.Controllers
                 {
                     var roles = await UserManager.GetRolesAsync(user.Id);
                     if (roles.FirstOrDefault() == "Normal Kullanıcı")
-                        return RedirectToAction("Index", "Handshake");
+                    {
+                        var sc = await bll.School().FindByIdAsync(user.Id);
+                        if (String.IsNullOrEmpty(sc.Phone_Number) || String.IsNullOrEmpty(sc.Address) || sc.City_Id == 0 || sc.District_Id == 0)
+                            return RedirectToAction("EditAccount", "Account");
+                        else
+                            return RedirectToAction("Index", "Handshake");
+                    }
                     else
                         return RedirectToAction("Index", "Server");
-                }               
+                }
             }
             return View();
-        }     
+        }
         public ActionResult Error()
         {
             return View();

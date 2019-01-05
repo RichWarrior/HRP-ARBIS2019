@@ -25,13 +25,13 @@ namespace HRP.Arbis.Controllers
         {
             if (ModelState.IsValid)
             {
-                model.email = model.email;
+                model.email += "@meb.k12.tr";
                 var user = await UserManager.FindAsync(model.email, model.password);
                 if (user != null)
                 {
                     await SignInManager.SignInAsync(user, true, true);
                     return RedirectToAction("Index", "Home");
-                }               
+                }
             }
             ModelState.AddModelError("", "Kullanıcı Adı Şifre Yanlış!");
             return View();
@@ -40,6 +40,59 @@ namespace HRP.Arbis.Controllers
         [AllowAnonymous]
         public ActionResult ForgotPassword()
         {
+            return View();
+        }
+        [AllowAnonymous]
+        public ActionResult Register()
+        {
+            return View();
+        }
+        [AllowAnonymous]
+        [HttpPost]
+        public async Task<ActionResult> Register(RegisterViewModel model)
+        {
+            ApplicationUser user = new ApplicationUser();
+            user.Email = model.email + "@meb.k12.tr";
+            user.UserName = user.Email;
+            var password = Guid.NewGuid().ToString();
+            var passwordHash = "";
+            for (int i = 0; i < 6; i++)
+            {
+                passwordHash += password[i].ToString();
+            }
+            var registerSuccess = await UserManager.CreateAsync(user,passwordHash);
+            if (registerSuccess.Succeeded)
+            {
+                var registerUser = await UserManager.FindByEmailAsync(user.Email);
+                var roleSuccess = await UserManager.AddToRoleAsync(registerUser.Id, "Normal Kullanıcı");
+                if (roleSuccess.Succeeded)
+                {
+                    var sc = await bll.School().Add(new DataAccessLayer.Contexts.Schools {
+                        Id =Guid.NewGuid().ToString(),
+                        Name=  model.schoolName,
+                        E_Mail = user.Email
+                    });
+                    if(sc)
+                    {
+                        var action = await bll.Action().Add(new DataAccessLayer.Contexts.Actions {
+                            email = user.Email,
+                            Message =String.Format("HRP-ARBIS SIFRENIZ {0}",passwordHash),
+                            Is_Completed = 1
+                        });
+                        if (action)
+                            ModelState.AddModelError("", "Kullanıcınız Oluşturuldu! Şifreniz Size Mail Gönderilecektir");
+                        else
+                            ModelState.AddModelError("", "Kullanıcı Eklenemedi!");
+                    }else
+                        ModelState.AddModelError("", "Kullanıcı Eklenemedi!");
+
+                }else
+                    ModelState.AddModelError("", "Kullanıcı Eklenemedi!");
+            }
+            else
+            {
+                ModelState.AddModelError("", "Kullanıcı Eklenemedi!");
+            }
             return View();
         }
         [AllowAnonymous]
@@ -60,9 +113,10 @@ namespace HRP.Arbis.Controllers
                 var result = await UserManager.UpdateAsync(user);
                 if (result.Succeeded)
                 {
-                    var b = await bll.Action().Add(new DataAccessLayer.Contexts.Actions {
+                    var b = await bll.Action().Add(new DataAccessLayer.Contexts.Actions
+                    {
                         email = model.email,
-                        Message = String.Format("HRP ARBIS SIFRENIZ {0}",passwordHash),
+                        Message = String.Format("HRP ARBIS SIFRENIZ {0}", passwordHash),
                         Is_Completed = 0
                     });
                     return RedirectToAction("Login", "Account");
@@ -132,22 +186,51 @@ namespace HRP.Arbis.Controllers
                 if (model.Password != null)
                 {
                     user.PasswordHash = UserManager.PasswordHasher.HashPassword(model.Password);
-                    var result = await UserManager.UpdateAsync(user);                    
+                    var result = await UserManager.UpdateAsync(user);
                 }
                 var updateSuccess = await bll.School().Update(user.Id, new DataAccessLayer.Contexts.Schools
                 {
+                    Name = model.Name,
                     City_Id = model.CityId,
                     District_Id = model.District_Id,
                     Phone_Number = model.phoneNumber,
                     Address = model.address,
-                     SchoolType = model.type_id
+                    SchoolType = model.type_id
                 });
                 if (updateSuccess)
                     return RedirectToAction("Index", "Home");
 
             }
+            var response = new SchoolProfileViewModel();
             ModelState.AddModelError("", "Bilgileriniz Güncellenemedi");
-            return View(model);
+            var city = await bll.City().ListByAsync();
+            foreach (var item in city)
+            {
+                response.City.Add(new CountryViewModel
+                {
+                    Id = item.Id,
+                    Name = item.Name
+                });
+                foreach (var ds in item.District)
+                {
+                    response.District.Add(new DistrictViewModel
+                    {
+                        Id = ds.Id,
+                        Name = ds.Name
+                    });
+                }
+
+            }
+            var type = await bll.SType().ListAsync();
+            foreach (var item in type)
+            {
+                response.type.Add(new SchoolTypeViewModel
+                {
+                    Id = item.Id,
+                    Name = item.Name
+                });
+            }
+            return View(response);
         }
         [Authorize]
         public ActionResult LogOff()

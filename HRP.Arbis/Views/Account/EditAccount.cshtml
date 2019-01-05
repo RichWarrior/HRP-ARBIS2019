@@ -27,6 +27,7 @@
 <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12">
     <div class="card">
         <h5 class="card-header">Profilinizi Düzenleyiniz</h5>
+        <h6 class="card-header">Tüm Bilgilerinizi Eksiksiz Doldurunuz!(Yeni-Sifre İstege Baglı)</h6>
         @Html.ValidationSummary()
         <div class="card-body">
             @using (Html.BeginForm())
@@ -35,13 +36,13 @@
                 <div class="form-group row">
                     <label for="inputEmail2" class="col-3 col-lg-2 col-form-label text-right">@Html.LabelFor(x => x.Name)</label>
                     <div class="col-9 col-lg-10">
-                        <input id="Name" type="text" name="Name" class="form-control disabled" value="@Html.ValueFor(x=>x.Name)">
+                        <input id="Name" type="text" name="Name" class="disabled form-control" value="@Html.ValueFor(x=>x.Name)" required>
                     </div>
                 </div>
                 <div class="form-group row">
                     <label for="inputEmail2" class="col-3 col-lg-2 col-form-label text-right">@Html.LabelFor(x => x.E_Mail)</label>
                     <div class="col-9 col-lg-10">
-                        <input id="E_Mail" type="text" name="E_Mail" class="form-control disabled" value="@Html.ValueFor(x=>x.E_Mail)">
+                        <input id="E_Mail" type="text" name="E_Mail" class="disabled form-control disabled" value="@Html.ValueFor(x=>x.E_Mail)" readonly>
                     </div>
                 </div>
                 <div class="form-group row">
@@ -53,13 +54,13 @@
                 <div class="form-group row">
                     <label for="inputEmail2" class="col-3 col-lg-2 col-form-label text-right">@Html.LabelFor(x => x.phoneNumber)</label>
                     <div class="col-9 col-lg-10">
-                        <input id="phoneNumber" type="text" name="phoneNumber" class="form-control" value="@Html.ValueFor(x=>x.phoneNumber)">
+                        <input id="phoneNumber" type="text" name="phoneNumber" class="form-control" value="@Html.ValueFor(x=>x.phoneNumber)" required>
                     </div>
                 </div>
                 <div class="form-group row">
                     <label for="inputEmail2" class="col-3 col-lg-2 col-form-label text-right">@Html.LabelFor(x => x.address)</label>
                     <div class="col-9 col-lg-10">
-                        <textarea id="address" type="text" name="address" class="form-control" rows="5" cols="50">@Html.ValueFor(x=>x.address)</textarea>
+                        <textarea id="address" type="text" name="address" class="form-control" rows="5" cols="50" required>@Html.ValueFor(x=>x.address)</textarea>
                     </div>
                 </div>
                 <div class="form-group row">

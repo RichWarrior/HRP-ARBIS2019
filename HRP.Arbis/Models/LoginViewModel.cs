@@ -11,6 +11,15 @@ namespace HRP.Arbis.Models
         [Required]
         public string password { get; set; }
     }
+    public class RegisterViewModel
+    {
+        [Display(Name = "Kurum Kodu")]
+        [Required]
+        public string email { get; set; }
+        [Display(Name = "Şifre")]
+        [Required]
+        public string schoolName { get; set; }
+    }
     public class ForgotViewModel
     {
         [Display(Name = "Kurum Kodu")]

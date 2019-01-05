@@ -48,6 +48,7 @@ namespace HRP.Arbis.Controllers
             {
                 //Mail Gönderilecek
                 model.Id = Guid.NewGuid().ToString();
+                model.E_Mail += "@meb.k12.tr";
                 var password = Guid.NewGuid().ToString();
                 var passwordHash = "";
                 for (int i = 0; i < 6; i++)
